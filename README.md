@@ -7,7 +7,7 @@ Ricardo Augusto Borsoi, Guilherme Holsbach Costa, José Carlos Moreira Bermudez,
 This demo uses pieces of code provided by different authors. Atribution can be found in the respective codes.
 
 
-To execute the demo, the low-resolution image sequence must be saved as an array named "frames_LR", of dimensions height * width * frames, in a .mat file. The file name/path is specified as a string at the beginning of the main.m file.
+To execute the demo, the low-resolution image sequence must be saved within a .mat file as an array named "frames_LR", of dimensions height * width * frames. The file name/path is specified as a string at the beginning of the main.m file.
 
 
 
