@@ -1,0 +1,73 @@
+function [G] = gera_matriz_movimento_global(l, c, nl, nc, flag_espelha)
+%---- ajuda para gera_matriz_movimento_global.m ---------------------------
+%
+% function [G] = gera_matriz_movimento_global(l, c, nl, nc, flag_espelha)
+%
+% Gera matriz de movimento G(n) - usada na restauração.
+%
+% Parâmetros de entrada:    l, c     = coordenadas do movimento
+%                                      y = Gx
+%                                      c = 1 move x 1 pixel para a esquerda
+%                                      l = 1 move x 1 pixel para cima
+%                           nl, nc   = dimensão dos quadros a serem gerados
+%                           flag_espelha = 0 -> considera a regiao fora da 
+%                                               imagem como contendo zeros
+%                                          1 -> espelha imagem ao redor 
+%                                               das bordas
+%                                          2 -> espelha imagem de forma
+%                                               periódica
+%
+% Parâmetros de saída:      G        = matriz de movimento a ser usada na 
+%                                      restauração
+%
+% Obs: Funciona para deslocamentos inteiros e fracionários
+%
+% Guilherme Holsbach Costa 
+% 27/06/2004
+%--------------------------------------------------------------------------
+
+G = sparse(nl*nc, nl*nc);
+
+if((mod(l,1) == 0) & (mod(c,1) == 0))
+    nlm = 2*abs(l) + 1;          % Define num de linhas e colunas
+    ncm = 2*abs(c) + 1;          % da máscara n
+    Mascara = zeros(nlm, ncm);
+    Mascara(abs(l) + 1 + l, abs(c) + 1 + c) = 1;
+    G = matriz_conv(Mascara, nl, nc, flag_espelha);
+else
+    if(mod(l,1) == 0)
+        nlm = 2*abs(l) + 1;          % Define num de linhas e colunas
+    else
+        nlm = 2*(abs(l) - mod(abs(l),1) + 1) + 1;
+    end
+    if(mod(c,1) == 0)
+        ncm = 2*abs(c) + 1;          % da máscara n
+    else
+        ncm = 2*(abs(c) - mod(abs(c),1) + 1) + 1;
+    end
+    
+    Mascara = zeros(nlm, ncm);
+    p1 = (1 - mod(abs(l),1))*(1 - mod(abs(c),1));
+    p2 = (1 - mod(abs(l),1))*mod(abs(c),1);
+    p3 = mod(abs(l),1)*(1 - mod(abs(c),1));
+    p4 = mod(abs(l),1)*mod(abs(c),1);
+    
+    l_int = abs(l) - mod(abs(l),1);
+    l_int = sign(l) * l_int;
+    c_int = abs(c) - mod(abs(c),1);
+    c_int = sign(c) * c_int;
+    if(p1 ~= 0)
+        Mascara((nlm+1)/2 + l_int, (ncm+1)/2 + c_int) = p1;
+    end
+    if(p2 ~= 0)
+        Mascara((nlm+1)/2 + l_int, (ncm+1)/2 + c_int + sign(c)) = p2;
+    end
+    if(p3 ~= 0)
+        Mascara((nlm+1)/2 + l_int + sign(l), (ncm+1)/2 + c_int) = p3;
+    end
+    if(p4 ~= 0)
+        Mascara((nlm+1)/2 + l_int + sign(l), (ncm+1)/2 + ...
+            c_int + sign(c)) = p4;
+    end
+    G = matriz_conv(Mascara, nl, nc, flag_espelha);
+end    

@@ -1,0 +1,1 @@
+P. Vandewalle, S. Süsstrunk and M. Vetterli, A Frequency Domain Approach to Registration of Aliased Images with Application to Super-Resolution, EURASIP Journal on Applied Signal Processing (special issue on Super-resolution), Vol. 2006, pp. Article ID 71459, 14 pages, 2006.

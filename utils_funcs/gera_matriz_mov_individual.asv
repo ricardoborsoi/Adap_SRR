@@ -1,0 +1,51 @@
+function [G] = gera_matriz_mov_individual(dx, dy, nl, nc, flag_full)
+%--------------------------------------------------------------------------
+% Gera matriz de movimento G(t).
+%
+% Parâmetros de entrada:    dx, dy   = vetores com as coordenadas do 
+%                                      movimento de cada pixel
+%                                      l(t) = l(t-1) + dy
+%                                      c(t) = c(t-1) + dx
+%                           nl, nc   = dimensão dos quadros a serem gerados
+%                           flag_full= sinaliza se os lugares referentes 
+%                                      às inovações devem permanecer com 
+%                                      (=1) o valor da imagem anterior ou
+%                                      (=0) devem conter zeros
+%
+% Parâmetros de saída:      G        = matriz de movimento 
+%
+% Obs: Funciona para deslocamentos inteiros
+%
+% Guilherme Holsbach Costa 
+% 01/12/2004
+%--------------------------------------------------------------------------
+
+G = sparse(nl*nc, nl*nc);    % Inicializa matriz de deslocamento
+
+for ll = 1:nl,
+    for cl = 1:nc,
+        i = cl + (ll-1)*nc;
+        for l = 1:nl,
+            for c = 1:nc,
+                j = c + (l-1)*nc;
+                temp = abs(cl - c - dx(j));
+                if(temp <=1)
+                    temp = 1 - 
+                G(i, j) = 1;
+
+for l = 1:nl,
+    for c = 1:nc,
+        i = c + (l-1)*nc;
+        l_dest = l + dy(i);
+        c_dest = c + dx(i);
+        if((l_dest <= 0) | (c_dest <= 0) | (l_dest > nl) | (c_dest > nc))
+            if(flag_full == 1)
+                indice = i;
+                G(i, i) = 1;
+            end
+        else
+            G(i, c_dest + (l_dest-1)*nc) = 1;
+        end
+    end
+end
+
