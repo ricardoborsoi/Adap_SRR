@@ -16,7 +16,7 @@ clc
 
 % Absolute file path of a .mat file containing the LR video in an array
 % named "frames_LR" of dimension nr_lr * nc_lr * T
-file_LR_vid = '/home/ricardo/Documents/framesTeste.mat';
+file_LR_vid = 'framesTeste.mat';
 
 % upsampling factor
 upsampling_fact = 2;
